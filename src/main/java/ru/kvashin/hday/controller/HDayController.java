@@ -7,16 +7,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kvashin.hday.data.DayDescription;
+import ru.kvashin.hday.service.CalendParserService;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.List;
 
 @EnableResourceServer
 @RestController
 public class HDayController extends ResourceServerConfigurerAdapter {
 
+    CalendParserService calendParserService = new CalendParserService();
+
     @RequestMapping("/today")
-    public DayDescription todayDecription(@RequestParam(value = "value", defaultValue = "defaultValue") String name) {
-        return new DayDescription(new Date().toString(), "Hi!");
+    public List<DayDescription> todayDecription(@RequestParam(value = "value", defaultValue = "defaultValue") String name) {
+        return calendParserService.getDayDescriptionListByDate(LocalDate.now().toString());
     }
 
     @Override
