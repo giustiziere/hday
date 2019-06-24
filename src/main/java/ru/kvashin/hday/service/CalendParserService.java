@@ -4,6 +4,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import ru.kvashin.hday.data.DayDescription;
@@ -20,7 +23,9 @@ public class CalendParserService {
     private String getBodyByDate(String date) {
         String body = "";
         try {
-            ResponseEntity<String> responseEntity = restTemplate.getForEntity(CALEND_URL + date, String.class);
+            HttpHeaders headers = new HttpHeaders();
+            HttpEntity<String> httpEntity = new HttpEntity<>(null, headers);
+            ResponseEntity<String> responseEntity = restTemplate.exchange(CALEND_URL + date, HttpMethod.GET, httpEntity, String.class);
             if (responseEntity.getBody() != null) {
                 body = responseEntity.getBody();
             }
